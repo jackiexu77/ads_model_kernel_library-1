@@ -41,10 +41,8 @@ class SeqlenInfo:
 
     def __init__(
         self,
-        # pyre-fixme[11]: Annotation `cutlass.Int32` is not defined as a type.
         batch_idx: cutlass.Int32,
         seqlen_static: cutlass.Int32,
-        # pyre-fixme[11]: Annotation `cute.Tensor` is not defined as a type.
         cu_seqlens: cute.Tensor | None = None,
         seqused: cute.Tensor | None = None,
     ) -> None:

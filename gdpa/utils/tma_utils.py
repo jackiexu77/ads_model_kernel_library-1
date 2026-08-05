@@ -30,11 +30,9 @@ class TmaAutoTuneHelper:
 
     def __init__(self):
         self.fill_1d_tma_descriptor_inner = (
-            # pyrefly: ignore [missing-attribute]
             triton.runtime.driver.active.utils.fill_1d_tma_descriptor
         )
         self.fill_2d_tma_descriptor_inner = (
-            # pyrefly: ignore [missing-attribute]
             triton.runtime.driver.active.utils.fill_2d_tma_descriptor
         )
         self.descriptors = {}

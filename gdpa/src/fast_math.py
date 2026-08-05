@@ -29,8 +29,7 @@ from cutlass._mlir.dialects import llvm  # pyre-ignore[21]
 from cutlass.cutlass_dsl import dsl_user_op, T  # pyre-ignore[21]
 
 
-@cute.jit  # pyre-ignore[56]
-# pyre-ignore[11]
+@cute.jit
 def clz(x: Int32) -> Int32:
     """Count leading zeros in a 32-bit integer.
 
@@ -59,15 +58,14 @@ def find_log2(x: Int32) -> Int32:
     return a + ((x & (x - 1)) != 0)  # Round up, add 1 if not a power of 2.
 
 
-@dsl_user_op  # pyre-ignore[56]
-# pyre-ignore[11]
+@dsl_user_op
 def umulhi(
     a: Int32,
     b: Int32,
     *,
     loc: object | None = None,
     ip: object | None = None,
-) -> Uint32:  # pyre-ignore[11]
+) -> Uint32:
     """Unsigned multiply-high: returns the upper 32 bits of the 64-bit product a*b.
 
     Uses PTX mul.hi.u32 instruction.
@@ -92,14 +90,11 @@ class FastDivmod:
     with a multiply+shift on the GPU.
     """
 
-    # pyre-ignore[11]
     divisor: Int32
-    # pyre-ignore[11]
     multiplier: Uint32
-    # pyre-ignore[11]
     shift_right: Uint32
     _loc: object | None
-    _values_pos: list[int]  # pyre-ignore[13]
+    _values_pos: list[int]
 
     def __init__(
         self,
@@ -110,9 +105,9 @@ class FastDivmod:
         loc: object | None = None,
         ip: object | None = None,
     ) -> None:
-        self.divisor = divisor  # pyre-ignore[4]
-        self.multiplier = multipler  # pyre-ignore[4]
-        self.shift_right = shift_right  # pyre-ignore[4]
+        self.divisor = divisor
+        self.multiplier = multipler
+        self.shift_right = shift_right
         self._loc = loc
 
     # called by host
@@ -132,7 +127,7 @@ class FastDivmod:
         shift_right = Uint32(p - 32)
         return FastDivmod(divisor, multiplier, shift_right, loc=loc, ip=ip)
 
-    @cute.jit  # pyre-ignore[56]
+    @cute.jit
     def div(self, dividend: Int32) -> Int32:
         return (
             Int32(umulhi(dividend, self.multiplier) >> self.shift_right)
@@ -140,7 +135,6 @@ class FastDivmod:
             else dividend
         )
 
-    # pyre-ignore[11]
     def divmod(self, dividend: Int32) -> tuple[Int32, Int32]:
         quotient = self.div(dividend)
         remainder = dividend - quotient * self.divisor

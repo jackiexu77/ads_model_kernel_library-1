@@ -27,10 +27,8 @@ E4M3_MAX_NORM_RCP: float = 1.0 / 448.0
 E8M0_NEUTRAL_SCALE: int = 127
 
 
-# pyre-ignore[56]
 @dsl_user_op
 def pack_4xu8_to_u32(
-    # pyre-ignore[11]
     b0: Uint8,
     b1: Uint8,
     b2: Uint8,
@@ -38,7 +36,6 @@ def pack_4xu8_to_u32(
     *,
     loc: object | None = None,
     ip: object | None = None,
-    # pyre-ignore[11]
 ) -> Uint32:
     """Pack 4 Uint8 values into a Uint32 (little-endian: b0 is lowest byte)."""
     return Uint32(
@@ -71,10 +68,8 @@ def pack_4xu8_to_u32(
     )
 
 
-# pyre-ignore[56]
 @dsl_user_op
 def store_u32_shared(
-    # pyre-ignore[11]
     ptr: Int64,
     val: Uint32,
     *,
@@ -96,10 +91,8 @@ def store_u32_shared(
     )
 
 
-# pyre-ignore[56]
 @dsl_user_op
 def tanh(
-    # pyre-ignore[11]
     a: float | Float32,
     *,
     loc: object | None = None,
@@ -118,7 +111,6 @@ def tanh(
     )
 
 
-# pyre-ignore[56]
 @dsl_user_op
 def max_f32(
     a: float | Float32,
@@ -141,7 +133,6 @@ def max_f32(
     )
 
 
-# pyre-ignore[56]
 @dsl_user_op
 def step_f32(
     x: float | Float32, *, loc: object | None = None, ip: object | None = None
@@ -162,7 +153,6 @@ def step_f32(
     )
 
 
-# pyre-ignore[56]
 @dsl_user_op
 def abs_f32(
     val: Float32, *, loc: object | None = None, ip: object | None = None
@@ -181,7 +171,6 @@ def abs_f32(
     )
 
 
-# pyre-ignore[56]
 @dsl_user_op
 def max3_f32(
     a: float | Float32,
@@ -213,7 +202,6 @@ def max3_f32(
     )
 
 
-# pyre-ignore[56]
 @dsl_user_op
 def mul_cvt_relu_8x_e4m3(
     in_0: Float32,
@@ -290,7 +278,6 @@ def mul_cvt_relu_8x_e4m3(
     )
 
 
-# pyre-ignore[56]
 @dsl_user_op
 def unpack_i64_to_u32_pair(
     packed: Int64, *, loc: object | None = None, ip: object | None = None
@@ -314,7 +301,6 @@ def unpack_i64_to_u32_pair(
     return lo, hi
 
 
-# pyre-ignore[56]
 @dsl_user_op
 def cvt_relu_8x_e4m3(
     s0: Float32,
@@ -377,7 +363,6 @@ def cvt_relu_8x_e4m3(
     )
 
 
-# pyre-ignore[56]
 @dsl_user_op
 def cvt_8x_e4m3(
     s0: Float32,
@@ -440,7 +425,6 @@ def cvt_8x_e4m3(
     )
 
 
-# pyre-ignore[56]
 @dsl_user_op
 def fused_amax_to_e8m0_scale_f32(
     amax: Float32,
@@ -524,7 +508,6 @@ class Relu:
     ReLU gradient: 1 if x >= 0, else 0
     """
 
-    # pyre-ignore[11]
     def __init__(
         self,
         scale_qk: Float32,
@@ -533,19 +516,16 @@ class Relu:
         self.c_zero: object = (Float32(0.0), Float32(0.0))
         self.c_one: object = (Float32(1.0), Float32(1.0))
 
-    # pyre-ignore[56]
     @cute.jit
     def relu(self, x: tuple[Float32, Float32]) -> tuple[Float32, Float32]:
         """Apply ReLU activation: max(0, x) for packed f32x2."""
         return (max_f32(x[0], Float32(0.0)), max_f32(x[1], Float32(0.0)))
 
-    # pyre-ignore[56]
     @cute.jit
     def grad_relu(self, x: tuple[Float32, Float32]) -> tuple[Float32, Float32]:
         """Compute ReLU gradient: 1 if x >= 0, else 0 for packed f32x2."""
         return (step_f32(x[0]), step_f32(x[1]))
 
-    # pyre-ignore[56]
     @cute.jit
     def activation_and_gradient_relu(
         self, x: tuple[Float32, Float32]
@@ -556,17 +536,13 @@ class Relu:
         """
         act = self.relu(x)
         grad = self.grad_relu(x)
-        # pyre-ignore[60]
         return *act, *grad
 
-    # pyre-ignore[56]
     @cute.jit
     def relu_and_convert(
         self,
-        # pyre-ignore[11]
         acc_S_row: cute.Tensor,
         acc_S_row_converted: cute.Tensor,
-        # pyre-ignore[11]
         e2e_freq: cutlass.Constexpr[int] = 16,
         e2e_res: cutlass.Constexpr[int] = 4,
         e2e_frg_limit: cutlass.Constexpr[int] = 1,
@@ -591,7 +567,6 @@ class Relu:
                 acc_S_row_frg[None, j].load().to(acc_S_row_converted.element_type)
             )
 
-    # pyre-ignore[56]
     @cute.jit
     def grad_relu_and_convert(
         self,
@@ -631,7 +606,6 @@ class Relu:
                 acc_P_row_frg[None, j].load().to(acc_P_row_f16_frg.element_type)
             )
 
-    # pyre-ignore[56]
     @cute.jit
     def relu_and_convert_blockscaled(
         self,
@@ -821,7 +795,6 @@ class Relu:
 
 
 class Gelu:
-    # pyre-ignore[11]
     def __init__(
         self,
         scale_qk: Float32,
@@ -870,25 +843,18 @@ class Gelu:
             Float32(0.0001171766272366646),
         )
         self.c_talyor_2_mul_c2: object = (
-            # pyre-ignore[16]
             Float32(self.c_taylor_c2[0] * self.c_two[0]),
-            # pyre-ignore[16]
             Float32(self.c_taylor_c2[1] * self.c_two[1]),
         )
         self.c_taylor_4_mul_c4: object = (
-            # pyre-ignore[16]
             Float32(self.c_taylor_c4[0] * self.c_four[0]),
-            # pyre-ignore[16]
             Float32(self.c_taylor_c4[1] * self.c_four[1]),
         )
         self.c_taylor_6_mul_c6: object = (
-            # pyre-ignore[16]
             Float32(self.c_taylor_c6[0] * self.c_six[0]),
-            # pyre-ignore[16]
             Float32(self.c_taylor_c6[1] * self.c_six[1]),
         )
 
-    # pyre-ignore[56]
     @cute.jit
     def gelu_tanh(self, x: tuple[Float32, Float32]) -> tuple[Float32, Float32]:
         # x^2
@@ -906,7 +872,6 @@ class Gelu:
 
         return (t_x, t_y)
 
-    # pyre-ignore[56]
     @cute.jit
     def activation_and_gradient_fast_gelu(
         self, x: tuple[Float32, Float32]
@@ -925,10 +890,8 @@ class Gelu:
         grad = cute.arch.fma_packed_f32x2(tanh_1, self.c_half, term1)
         act = cute.arch.mul_packed_f32x2(half_x, tanh_1)
 
-        # pyre-ignore[60]
         return *act, *grad
 
-    # pyre-ignore[56]
     @cute.jit
     def fast_gelu(self, x: tuple[Float32, Float32]) -> tuple[Float32, Float32]:
         # TODO: Seems like the complier may be able to handle this, without explicitly calling packed_f32x2:
@@ -940,7 +903,6 @@ class Gelu:
         out = cute.arch.mul_packed_f32x2(out, tanh_1)
         return out
 
-    # pyre-ignore[56]
     @cute.jit
     def grad_fast_gelu(self, x: tuple[Float32, Float32]) -> tuple[Float32, Float32]:
         # TODO: Seems like the complier may be able to handle this, without explicitly calling packed_f32x2:
@@ -960,7 +922,6 @@ class Gelu:
         out = cute.arch.fma_packed_f32x2(one_plus_tanh, self.c_half, term1)
         return out
 
-    # pyre-ignore[56]
     @cute.jit
     def activation_and_gradient_gelu_taylor_deg6(
         self, x: tuple[Float32, Float32]
@@ -989,10 +950,8 @@ class Gelu:
 
         grad = cute.arch.add_packed_f32x2(part1, part2)
         act = cute.arch.fma_packed_f32x2(x2, tmp, x_half)  # 0.5*x + x2*tmp
-        # pyre-ignore[60]
         return *act, *grad
 
-    # pyre-ignore[56]
     @cute.jit
     def grad_gelu_taylor_deg6(
         self, x: tuple[Float32, Float32]
@@ -1020,7 +979,6 @@ class Gelu:
 
         return grad
 
-    # pyre-ignore[56]
     @cute.jit
     def gelu_taylor_deg6(self, x: tuple[Float32, Float32]) -> tuple[Float32, Float32]:
         # 0.5*x + x2*(c2 + x2*(c4 + x2*c6))
@@ -1033,7 +991,6 @@ class Gelu:
         out = cute.arch.fma_packed_f32x2(x2, tmp, x_half)  # 0.5*x + x2*tmp
         return out
 
-    # pyre-ignore[56]
     @cute.jit
     def gelu_taylor_deg10(self, x: tuple[Float32, Float32]) -> tuple[Float32, Float32]:
         # 0.5*x + x^2*(c2 + x^2*(c4 + x^2*(c6 + x^2*(c8 + x^2*c10))))
@@ -1048,7 +1005,6 @@ class Gelu:
         out = cute.arch.fma_packed_f32x2(x2, tmp, x_half)  # 0.5*x + x^2*tmp
         return out
 
-    # pyre-ignore[56]
     @cute.jit
     def gelu_and_convert(
         self,
@@ -1085,7 +1041,6 @@ class Gelu:
                 acc_S_row_frg[None, j].load().to(acc_S_row_converted.element_type)
             )
 
-    # pyre-ignore[56]
     @cute.jit
     def grad_gelu_and_convert(
         self,
@@ -1135,7 +1090,6 @@ class Gelu:
                 acc_P_row_frg[None, j].load().to(acc_P_row_f16_frg.element_type)
             )
 
-    # pyre-ignore[56]
     @cute.jit
     def gelu_and_convert_blockscaled(
         self,

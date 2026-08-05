@@ -327,7 +327,6 @@ def _gdpa_fwd_inner_ws(
 # We don't run auto-tuning every time to keep the tutorial fast. Keeping
 # the code below and commenting out the equivalent parameters is convenient for
 # re-tuning.
-# pyre-ignore[5]: Globally accessible variable `configs`
 configs = [
     triton_config(
         {"BLOCK_M": BM, "BLOCK_N": BN, "NUM_CONSUMER_GROUPS": 1},
@@ -351,7 +350,6 @@ omnifm_v3_no_autotune_configs = [
         num_stages=3,
     ),
 ]
-# pyre-ignore[5]: Globally accessible variable `configWS`
 configsWS = [
     (
         triton_config(
@@ -370,11 +368,9 @@ configsWS = [
     for w in warps_hw_supported([4])
 ]
 
-# pyre-ignore[5]: Globally accessible variable `DISABLE_AUTOTUNE`
 DISABLE_AUTOTUNE = os.environ.get("GDPA_DISABLE_AUTOTUNE") == "1"
 
 # Manually autotuned configs for faster autotuning
-# pyre-ignore[5]: Globally accessible variable `AUTOTUNE_CONFIG_SET`
 AUTOTUNE_CONFIG_SET = os.environ.get("GDPA_AUTOTUNE_CONFIG_SET", "default")
 
 if DISABLE_AUTOTUNE:
@@ -416,7 +412,6 @@ def _omnifm_v2_fwd_configs() -> List[Tuple[int, int, int, int]]:
         ]
 
 
-# pyre-ignore[5]: Globally accessible variable `fwd_autotune_configs`
 fwd_autotune_configs = {
     "default": tuple(configs),
     "omnifm_v2": tuple(
@@ -432,7 +427,6 @@ fwd_autotune_configs = {
     "omnifm_v3_eager_disable_autotune": omnifm_v3_no_autotune_configs,
     "omnifm_v3_pt2_disable_autotune": omnifm_v3_no_autotune_configs,
 }
-# pyre-ignore[5]: Globally accessible variable `fwd_autotune_configs_ws`
 fwd_autotune_configs_ws = {
     "default": tuple(configsWS),
     "omnifm_v2": tuple(configsWS),
@@ -451,7 +445,6 @@ mtia_configs = [
     )
 ]
 
-# pyre-ignore[5]: Globally accessible variable `mtia_autotune_configs`
 mtia_autotune_configs = {
     "default": tuple(mtia_configs),
     "omnifm_v2": tuple(mtia_configs),
@@ -640,7 +633,6 @@ def _gdpa_fwd_compute(
                 block_shape=(BLOCK_M, BLOCK_D),
                 order=(1, 0),
             )
-            # pyre-ignore[9]
             v_order: tl.constexpr = (
                 # pyrefly: ignore [bad-assignment]
                 (0, 1) if V.dtype.element_ty == tl.float8e5 else (1, 0)
@@ -1396,7 +1388,6 @@ def _gelu_variant_fwd_and_grad_dkdv(
         tanh_out = tanh_approx_bf16(
             0.7978845608 * pT_bf16 * (1 + 0.044715 * pT * pT)
         ).to(tl.float32)
-        # pyre-ignore[16]: `float` has no attribute `to`
         ppT = (0.5 * pT_bf16 * (1 + tanh_out)).to(tl.float32)
     if activation_enum_int == 6:
         pT_grad = 0.5 * pT * (1 - tanh_out * tanh_out) * (
@@ -1711,7 +1702,7 @@ def _gdpa_bwd_dq(
     offs_k,
     # pyre-ignore[2]: Parameter `off_h_kv` has no type specified.
     off_h_kv,
-    # pyre-ignore[2]: Parameter `#` has no type specified.
+    # ` has no type specified.
     # ln_scale,
     MASK: tl.constexpr,
     WINDOW_SIZE: tl.constexpr,
@@ -1809,7 +1800,6 @@ def _gdpa_bwd_dq(
     return dq
 
 
-# pyre-ignore[5]: Globally accessible variable `bwd_configs`
 bwd_configs = [
     triton_config(
         {
@@ -1831,7 +1821,6 @@ bwd_configs = [
     # pyrefly: ignore [not-iterable]
     for w in warps_hw_supported([4, 8])
 ]
-# pyre-ignore[5]: Globally accessible variable `bwd_configs_ws`
 bwd_configs_ws = [
     (
         triton_config(
@@ -1943,12 +1932,10 @@ def _omnifm_v2_bwd_configs() -> Tuple[Any, ...]:
         )
 
 
-# pyre-ignore[5]: Globally accessible variable `bwd_autotune_configs`
 bwd_autotune_configs = {
     "default": tuple(bwd_configs),
     "omnifm_v2": _omnifm_v2_bwd_configs(),
 }
-# pyre-ignore[5]: Globally accessible variable `bwd_autotune_configs_ws`
 bwd_autotune_configs_ws = {
     "default": tuple(bwd_configs_ws),
     "omnifm_v2": tuple(bwd_configs_ws),
@@ -1965,7 +1952,6 @@ bwd_mtia_configs = [
         },
     )
 ]
-# pyre-ignore[5]: Globally accessible variable `bwd_autotune_mtia_configs`
 bwd_autotune_mtia_configs = {
     "default": tuple(bwd_mtia_configs),
 }
@@ -3385,7 +3371,6 @@ def _generalized_dot_product_attention_setup_context(
     elif fused_kv:
         HEAD_DIM_K = key.shape[-1] // 2
     else:
-        # pyrefly: ignore [missing-attribute]
         HEAD_DIM_K = key.shape[-1]
     BLOCK_D = max(next_power_of_2(HEAD_DIM_K), 32)
 
@@ -4042,7 +4027,6 @@ def _unpack_nested_shapes_meta(
     return
 
 
-# pyre-ignore[56]
 @register_flop_formula(torch.ops.gdpa.generalized_dot_product_attention, get_raw=True)
 def generalized_dot_product_attention_forward_flop(
     query: torch.Tensor,
@@ -4128,7 +4112,6 @@ def generalized_dot_product_attention_forward_flop(
     )
 
 
-# pyre-ignore[56]
 @register_flop_formula(
     torch.ops.gdpa.generalized_dot_product_attention_backward, get_raw=True
 )
