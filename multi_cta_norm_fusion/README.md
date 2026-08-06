@@ -39,3 +39,7 @@ For interactive use outside the tests, add the kernel sources to `PYTHONPATH`:
 ```bash
 export PYTHONPATH="$PWD/src:$PYTHONPATH"
 ```
+
+## Reference
+
+- [Blog] [Towards Free Normalization: Fusing Normalization into GEMM and Attention Kernels](https://pytorch.org/blog/towards-free-normalization-fusing-normalization-into-gemm-and-attention-kernels/)

@@ -24,3 +24,7 @@ buck2 test fbcode//ads_mkl/ops/oss/block_attention:test_tlx_block_attention
 This test target includes:
 - `fbcode/ads_mkl/ops/oss/block_attention/triton/tests/test_tlx_block_attention.py`
 - `fbcode/ads_mkl/ops/oss/block_attention/tests/block_attention_test.py`
+
+## Reference
+
+- [Blog] [TLX Block Attention: A Warp-Specialized Blackwell Kernel for Fixed Block-Sparse Self-Attention](https://pytorch.org/blog/tlx-block-attention-a-warp-specialized-blackwell-kernel-for-fixed-block-sparse-self-attention/)
