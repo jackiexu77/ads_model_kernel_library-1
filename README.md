@@ -4,12 +4,12 @@ High-performance GPU kernels for Meta Ads Recommendation Systems, developed by M
 
 ## Projects
 
-| Project | Description | Architecture | Path |
-|---------|-------------|--------------|------|
-| [GDPA](gdpa/) | Generalized Dot Product Attention kernels | Blackwell (SM100) | `gdpa/` |
-| [TLX Block Attention](block_attention/) | Triton TLX block attention kernels | Blackwell (SM100) | `block_attention/` |
-| [TLX Multi-CTA Norm Fusion](multi_cta_norm_fusion/) | Triton TLX fused matmul with RMSNorm and LayerNorm kernels | Blackwell (SM100) | `multi_cta_norm_fusion/` |
-| [TLX GDPA Megakernel](gdpa_megakernel/) | Triton TLX generalized dot product attention megakernel | Blackwell (SM100) | `gdpa_megakernel/` |
+| Project | Description | Architecture | Path | Blog |
+|---------|-------------|--------------|------|------|
+| [GDPA](gdpa/) | Generalized Dot Product Attention kernels | Blackwell (SM100) | `gdpa/` | [PyTorch Blog](https://pytorch.org/blog/generalized-dot-product-attention-tackling-real-world-challenges-in-gpu-training-kernels/) |
+| [TLX Block Attention](block_attention/) | Triton TLX block attention kernels | Blackwell (SM100) | `block_attention/` | [PyTorch Blog](https://pytorch.org/blog/tlx-block-attention-a-warp-specialized-blackwell-kernel-for-fixed-block-sparse-self-attention/) |
+| [TLX Multi-CTA Norm Fusion](multi_cta_norm_fusion/) | Triton TLX fused matmul with RMSNorm and LayerNorm kernels | Blackwell (SM100) | `multi_cta_norm_fusion/` | [PyTorch Blog](https://pytorch.org/blog/towards-free-normalization-fusing-normalization-into-gemm-and-attention-kernels/) |
+| [TLX GDPA Megakernel](gdpa_megakernel/) | Triton TLX generalized dot product attention megakernel | Blackwell (SM100) | `gdpa_megakernel/` | [PyTorch Blog](https://pytorch.org/blog/towards-free-normalization-fusing-normalization-into-gemm-and-attention-kernels/) |
 
 ## Requirements
 
@@ -45,7 +45,7 @@ See individual project READMEs for detailed usage:
 
 ## Contributors
 
-**Meta Ads AI:** Jiaqi Xu, Chao Chen, Hongtao Yu, Dev Shanker, Junqing (Jacky) Zhou, Han Xu, Jake Siso, Xiaoyi Liu, Huayu Li, Markus Hoehnerbach, Manman Ren
+**Meta Ads AI:** Jiaqi Xu, Hongtao Yu, Dev Shanker, Junqing (Jacky) Zhou, Han Xu, Jake Siso, Xiaoyi Liu, Huayu Li, Markus Hoehnerbach, Manman Ren, Chao Chen, Hao Yan, Weinan Song
 
 More contributors will be added as we publish more kernels.
 
